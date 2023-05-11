@@ -204,7 +204,7 @@ document.querySelector("body > dialog:nth-child(4) > div > div > button.overlay_
               result.push (books[book])
             }
            }
-           
+
            if (formData.genre === 'any') {
             if (books[book].title.toLowerCase().includes(formData.title.toLowerCase()) && books[book].author === formData.authors){
              result.push(books[book]);
@@ -223,7 +223,11 @@ document.querySelector("body > dialog:nth-child(4) > div > div > button.overlay_
                }
                
 }
-if (result.length === 0)document.querySelector('[data-list-message]').classList.add('list__message_show')
+if (result.length === 0){
+    document.querySelector('[data-list-message]').classList.add('list__message_show')
+} else {
+    document.querySelector('[data-list-message]').classList.remove('list__message_show')
+}
 let leftBooks = result.length - result.slice(0, 36).length
 document.querySelector('[data-list-remaining]').innerHTML = `${leftBooks}`
     if (leftBooks <= 0)appButtons.showMoreButton.disabled = true
