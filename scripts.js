@@ -59,7 +59,7 @@ const createpreview = ({ author, image, title, id, description, published}) => {
  let extracted = books.slice(0, 36)
 
 /** Creating the discription that will toggle on when a certain book is pressed **/
- console.log (extracted.length)
+
 const displayDiscription = (event) => {
    appoverlays.previewOverlay.show()
    const hero = document.querySelector('[data-list-blur]')
@@ -186,7 +186,8 @@ appButtons.showMoreButton.addEventListener('click', (event)=>{
 
 document.querySelector("body > dialog:nth-child(4) > div > div > button.overlay__button.overlay__button_primary").addEventListener('click', (event) => {
     event.preventDefault()
-    const searchForm = document.querySelector('[data-search-form]')
+
+    appoverlays.searchOverlay.close()
     
     const formData = {
         authors: document.querySelector('[data-search-authors]').value,
@@ -194,18 +195,22 @@ document.querySelector("body > dialog:nth-child(4) > div > div > button.overlay_
         genre: document.querySelector('[data-search-genres]').value
     }
 
+    let result = []
+    
     for (let book = 0; book < books.length; book++) {
-        let result = []
+      
         if (formData.authors === 'any' && formData.genre === 'any') {
             if (books[book].title.toLowerCase().includes(formData.title.toLowerCase())){
-             result.push(books[book]);
+              result.push (books[book])
             }
            }
+           
            if (formData.genre === 'any') {
             if (books[book].title.toLowerCase().includes(formData.title.toLowerCase()) && books[book].author === formData.authors){
              result.push(books[book]);
             }
            }
+
            if (formData.title === '') {
             if (books[book].author === formData.authors && books[book].genres.includes(formData.genre)){
              result.push(books[book]);
@@ -216,9 +221,16 @@ document.querySelector("body > dialog:nth-child(4) > div > div > button.overlay_
                  result.push(books[book]);
                 }
                }
-               const fragment = document.createDocumentFragment()
-        
-               for (let { author, image, title, id, description, published} of extracted) {
+               
+}
+if (result.length === 0)document.querySelector('[data-list-message]').classList.add('list__message_show')
+let leftBooks = result.length - result.slice(0, 36).length
+document.querySelector('[data-list-remaining]').innerHTML = `${leftBooks}`
+    if (leftBooks <= 0)appButtons.showMoreButton.disabled = true
+
+  const fragment = document.createDocumentFragment()
+  document.querySelector('[data-list-items]').innerHTML = ''      
+               for (let { author, image, title, id, description, published} of result) {
                 const preview = createpreview({
                     author,
                     image,
@@ -231,71 +243,7 @@ document.querySelector("body > dialog:nth-child(4) > div > div > button.overlay_
                 preview.addEventListener('click', displayDiscription)
                 fragment.appendChild(preview)
             };
-            
-            console.log (result)
-            //document.querySelector('[data-list-items]').appendChild(fragment)
-            //searchForm.style.display = ''
-                //  let titleMatch = formData.title.trim() === '' || book.title.toLowerCase().includes(formData.title.toLowerCase()) 
-                //  let  authorMatch =  formData.authors === 'Any authors ' || book.author === formData.authors
-                //  let genreMatch = formData.genre
-                //  let result = []
-
-                //  for (let genre = 0; genre < book.genres.length; genre++){
-                //     if (book.genres[genre] === formData.genre) genreMatch = true
-                //  }
-                // if (titleMatch === true && authorMatch === true && genreMatch === true){
-                //     if (formData.authors === 'Any authors')
-                //     result.push(book)
-                //     return result
-                // } else {
-                //    // document.querySelector('[data-list-message]').innerHTML.show()
-                // }
-
-    // document.querySelector('[data-list-items]').innerHTML = ''
-    // const fragment = document.createDocumentFragment()
-    // const extracted = result.slice(0, parseFloat(result.length/2) )
-    
-
-    // for (let { author, image, title, id, description, published} of extracted) {
-    //     const preview = createpreview({
-    //         author,
-    //         image,
-    //         title,
-    //         id,
-    //         description,
-    //         published
-    //     })
-        
-    //     preview.addEventListener('click', displayDiscription)
-    //     fragment.appendChild(preview)
-    // };
-   
-    
-    // document.querySelector('[data-list-items]').appendChild(fragment)
-
-            //      '' && book.title.toLocaleLowerCase().includes[filters.title.toLowerCase()]
-            //      authorMatch = filters.author = 'any' || book.author === filters.author
-        
-            //      {
-            //          genreMatch = filters.genre = 'any'
-            //          for (genre; book.genres; i++) { if singleGenre = filters.genre { genreMatch === true }}}
-            //      }
-        
-            //      if titleMatch && authorMatch && genreMatch => result.push(book)
-            //  }
-        
-        //     if display.length < 1 
-        //     data-list-message.class.add('list__message_show')
-        //     else data-list-message.class.remove('list__message_show')
-
-}
-
-// data-list-close.click() { data-list-active.open === false }
-
-// data-list-button.click() {
-//     document.querySelector([data-list-items]).appendChild(createPreviewsFragment(matches, page x BOOKS_PER_PAGE, {page + 1} x BOOKS_PER_PAGE]))
-//     actions.list.updateRemaining()
-//     page = page + 1
+            document.querySelector('[data-list-items]').appendChild(fragment)
  })
 
 
