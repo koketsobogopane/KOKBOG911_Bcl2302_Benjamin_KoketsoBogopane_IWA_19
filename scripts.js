@@ -153,7 +153,7 @@ saveButton.addEventListener('click', (event) =>{
 /********Day-Night toggle************/
 
 /************ Show more feature ***********************/
-document.querySelector('[data-list-button]').innerHTML = /* html */ [
+appButtons.showMoreButton.innerHTML = /* html */ [
     `<span>Show more</span>
     <span class="list__remaining" data-list-remaining> (${books.length - 36})</span>`,
 ]
